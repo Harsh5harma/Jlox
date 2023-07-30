@@ -36,6 +36,12 @@ class Interpreter implements Expr.Visitor<Object> {
     throw new RuntimeError(operator, "Operand must be a number.");
   }
 
+  private void checkNumberAndStringOperands(Token operator, Object left, Object right) {
+    if (left instanceof Double && right instanceof Double) return;
+    if (left instanceof String && right instanceof String) return;
+    throw new RuntimeError(operator, "Operands must be numbers or Strings.");
+  }
+
   private void checkNumberOperands(Token operator, Object left, Object right) {
     if (left instanceof Double && right instanceof Double) return;
     throw new RuntimeError(operator, "Operands must be numbers.");
@@ -53,6 +59,38 @@ class Interpreter implements Expr.Visitor<Object> {
 
     return a.equals(b);
   }
+
+  private static Boolean isStrGreater(String a, String b) {
+    if (a.length()>b.length()) {
+        return true;
+    } 
+    if (a.length() == b.length()) {
+        if (a==b) return false;
+        for (int i = 0; i<a.length(); i++ ) {
+            if ((int)a.charAt(i) < (int)b.charAt(i)){
+                return false;
+            }
+        }
+        return true;
+    } 
+    return false;
+}
+
+  private static Boolean isStrLesser(String a, String b) {
+    if (a.length()<b.length()) {
+        return true;
+    } 
+    if (a.length() == b.length()) {
+        if (a==b) return false;
+        for (int i = 0; i<a.length(); i++ ) {
+            if ((int)a.charAt(i) < (int)b.charAt(i)){
+                return false;
+            }
+        }
+        return true;
+    } 
+    return false;
+}
 
   private String stringify(Object object) {
     if (object == null) return "nil";
@@ -85,16 +123,38 @@ class Interpreter implements Expr.Visitor<Object> {
 
     switch(expr.operator.type) {
       case GREATER:
-        checkNumberOperands(expr.operator, left, right);
+        checkNumberAndStringOperands(expr.operator, left, right);
+        if (left instanceof String && right instanceof String) {
+          return isStrGreater((String)left, (String)right);
+        }
         return (double) left > (double) right;
       case GREATER_EQUAL:
-        checkNumberOperands(expr.operator, left, right);
+        checkNumberAndStringOperands(expr.operator, left, right);
+        if (left instanceof String && right instanceof String) {
+          if (isStrGreater((String)left, (String)right) ||
+          (String) left == (String) right) {
+            return true;
+          }
+          return false;
+        }
         return (double) left >= (double) right;
       case LESS:
-        checkNumberOperands(expr.operator, left, right);
+        checkNumberAndStringOperands(expr.operator, left, right);
+        if (left instanceof String && right instanceof String) {
+          return isStrLesser((String)left, (String)right);
+        }
         return (double) left < (double) right;
       case LESS_EQUAL:
-        checkNumberOperands(expr.operator, left, right);
+        checkNumberAndStringOperands(expr.operator, left, right);
+        if (left instanceof String && right instanceof String) {
+          if (isStrLesser((String)left, (String)right)) {
+              return true;
+          }else if ((String) left == (String) right){
+            return true;
+          }else {
+            return false;
+          }
+        }
         return (double) left <= (double) right;
       case BANG_EQUAL: return !isEqual(left, right);
       case EQUAL_EQUAL: return isEqual(left, right);
