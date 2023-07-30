@@ -1,4 +1,4 @@
-comma          → expression (","expression)* ; 
+comma          → expression ("," expression)* ; 
 expression     → equality ;
 conditional (?:)    → (equality|conditional) ? (primary|conditional) : (primary|conditional) ;      right to left 
 equality       → comparison ( ( "!=" | "==" ) comparison )* ;
