@@ -169,12 +169,30 @@ class Interpreter implements Expr.Visitor<Object> {
         if (left instanceof String && right instanceof String) {
           return (String)left + (String)right;
         }
+        
+        if (left instanceof String && right instanceof Double) {
+          String text = ((Double) right).toString();
+          if (text.endsWith(".0")) {
+            text = text.substring(0, text.length()-2);
+          }
+          return (String) left + text;
+        }
 
+        if (left instanceof Double && right instanceof String) {
+          String text = ((Double) left).toString();
+          if (text.endsWith(".0")) {
+            text = text.substring(0, text.length()-2);
+          }
+          return text + (String) right;
+        }
         throw new RuntimeError(expr.operator, 
-        "Operands must be two numbers or Strings");
+        "Operands must be a valid number or String");
 
       case SLASH:
         checkNumberOperands(expr.operator, left, right);
+        if ((double) right == 0) {
+          throw new RuntimeError(expr.operator, "Division by zero error.");
+        }
         return (double)left / (double)right;
       case STAR:
         checkNumberOperands(expr.operator, left, right);
