@@ -1,5 +1,13 @@
-package myclasses;
+package myclasses.astPrinter;
 
+import myclasses.Expr;
+import myclasses.Token;
+import myclasses.TokenType;
+import myclasses.Expr.Binary;
+import myclasses.Expr.Grouping;
+import myclasses.Expr.Literal;
+import myclasses.Expr.Unary;
+import myclasses.Expr.Visitor;
 
 class AstPrinter implements Expr.Visitor<String>{
   public static void main(String[] args) {
