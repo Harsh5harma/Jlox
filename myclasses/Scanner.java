@@ -19,6 +19,7 @@ public class Scanner {
     keywords.put("else", TokenType.ELSE);
     keywords.put("false", TokenType.FALSE);
     keywords.put("fun", TokenType.FUN);
+    keywords.put("for", TokenType.FOR);
     keywords.put("if", TokenType.IF);
     keywords.put("nil", TokenType.NIL);
     keywords.put("or", TokenType.OR);
