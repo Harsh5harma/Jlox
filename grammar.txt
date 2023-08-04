@@ -1,23 +1,32 @@
-INTERPRETER GRAMMAR:
+INTERPRETER/STATEMENT GRAMMAR:
 
 1) program        → declaration* EOF ;
 2) declaration    → varDecl | statement ;
-3) statement      → exprStmt | printStmt | block;
-4) block          → "{" declaration* "}";
-4) varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;
+3) statement      → exprStmt | ifStmt | printStmt | block;
+// The first clause is the initializer
+// The second class is the condition for loop termination
+// The last clause is the increment
+4) forStmt        → "for" "(" (varDecl | exprStmt | ";") expression? ";" expression? ")" statement;
+5) whileStmt      → "while" "(" expression ")" statement ;
+6) ifStmt         → "if" "(" expression ")" statement
+                    ("else" statement)? ;
+7) block          → "{" declaration* "}";
+8) varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;
 
 
 PARSING GRAMMAR:
 
 1) comma          → expression (","expression)* ; 
 2) expression     → assignment ;
-3) assignment     → IDENTIFIER "=" assignment | equality;
-4) conditional (?:)    → (equality|conditional) ? (primary|conditional) : (primary|conditional) ;   right to left 
-5) equality       → comparison ( ( "!=" | "==" ) comparison )* ;
-6) comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
-7) term           → factor ( ( "-" | "+" ) factor )* ;
-8) factor         → unary ( ( "/" | "*" ) unary )* ;
-9) unary          → ( "!" | "-" ) unary
+3) assignment     → IDENTIFIER "=" assignment | logic_or;
+4) logic_or       → logic_and ( "or" logic_and)*;
+5) logic_and      → equality ( "and" equality)*;
+6) conditional (?:)    → (equality|conditional) ? (primary|conditional) : (primary|conditional) ;   right to left (ignore for main branch)
+7) equality       → comparison ( ( "!=" | "==" ) comparison )* ;
+8) comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+9) term           → factor ( ( "-" | "+" ) factor )* ;
+10) factor         → unary ( ( "/" | "*" ) unary )* ;
+11) unary          → ( "!" | "-" ) unary
                | primary ;
-10) primary        → NUMBER | STRING | "true" | "false" | "nil"
+12) primary        → NUMBER | STRING | "true" | "false" | "nil"
                | "(" expression ")" | IDENTIFIER;
