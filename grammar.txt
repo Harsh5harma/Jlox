@@ -1,8 +1,10 @@
 INTERPRETER/STATEMENT GRAMMAR:
 
 1) program        → declaration* EOF ;
-2) declaration    → varDecl | statement ;
-3) statement      → exprStmt | ifStmt | printStmt | block;
+2) declaration    → varDecl | statement | funDecl ;
+3) statement      → exprStmt | forStmt | ifStmt | printStmt | returnStmt |
+      whileStmt | block ;
+4) returnStmt     → "return" expression? ";";
 // The first clause is the initializer
 // The second class is the condition for loop termination
 // The last clause is the increment
@@ -12,6 +14,11 @@ INTERPRETER/STATEMENT GRAMMAR:
                     ("else" statement)? ;
 7) block          → "{" declaration* "}";
 8) varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;
+
+funDecl     → "fun" function
+function    → IDENTIFIER "(" parameters? ")" block ;
+parameters  → IDENTIFIER ("," IDENTIFIER)* ;
+
 
 
 PARSING GRAMMAR:
@@ -25,8 +32,11 @@ PARSING GRAMMAR:
 7) equality       → comparison ( ( "!=" | "==" ) comparison )* ;
 8) comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
 9) term           → factor ( ( "-" | "+" ) factor )* ;
-10) factor         → unary ( ( "/" | "*" ) unary )* ;
-11) unary          → ( "!" | "-" ) unary
-               | primary ;
-12) primary        → NUMBER | STRING | "true" | "false" | "nil"
+10) factor        → unary ( ( "/" | "*" ) unary )* ;
+11) unary         → ( "!" | "-" ) unary | call ;
+// argument needs to have at least one expression in it, a call allows for empty arguments by making argument field optional.
+12) call          → primary ( "(" arguments? ")" )* ;  
+13) primary       → NUMBER | STRING | "true" | "false" | "nil"
                | "(" expression ")" | IDENTIFIER;
+
+arguments      → expression ("," expression)* ;               
