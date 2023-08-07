@@ -219,7 +219,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
     // kinda like telling how far we've popped out the scope stack.
     for (int i = scopes.size() -1; i >=0; i--) {
       if (scopes.get(i).containsKey(name.lexeme)) {
-        interpreter.resolve(expr, scopes.size() -i );
+        interpreter.resolve(expr, scopes.size() -i -1);
         return;
       }
     }
