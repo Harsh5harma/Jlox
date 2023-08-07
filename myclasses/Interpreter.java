@@ -213,7 +213,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   @Override 
   public Object visitAssignExpr(Expr.Assign expr) {
     Object value = evaluate(expr.value);
-    Integer distance = locals.get(Expr);
+    Integer distance = locals.get(expr);
     if (distance != null) {
       environment.assignAt(distance, expr.name, value);
     } else {
@@ -273,7 +273,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
       Object callee = evaluate(expr.callee);
 
       List<Object> arguments = new ArrayList<>();
-      for (Expr argument: expr.arguments) {
+      for (Expr argument : expr.arguments) {
         arguments.add(evaluate(argument));
       }
 

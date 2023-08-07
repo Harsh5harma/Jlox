@@ -5,21 +5,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import myclasses.Stmt.Function;
 
 class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
   private final Interpreter interpreter;
-  private final Stack<Map<String, Boolean>> scopes = new Stack();
+  private final Stack<Map<String, Boolean>> scopes = new Stack<>();
   private FunctionType currentFunction = FunctionType.NONE;
+
+
+  Resolver(Interpreter interpreter) {
+    this.interpreter = interpreter;
+  }
 
   private enum FunctionType {
   NONE, 
   FUNCTION
   }
-  Resolver(Interpreter interpreter) {
-    this.interpreter = interpreter;
-  }
-
+  
   @Override
   public Void visitBlockStmt(Stmt.Block stmt) {
     beginScope();
@@ -158,8 +159,8 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
     }
   }
 
-  private void resolve(Stmt statement) {
-    statement.accept(this);
+  private void resolve(Stmt stmt) {
+    stmt.accept(this);
   }
 
 
@@ -223,6 +224,21 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
       }
     }
   }
+
+
+    /**
+     * @return FunctionType return the currentFunction
+     */
+    public FunctionType getCurrentFunction() {
+        return currentFunction;
+    }
+
+    /**
+     * @param currentFunction the currentFunction to set
+     */
+    public void setCurrentFunction(FunctionType currentFunction) {
+        this.currentFunction = currentFunction;
+    }
 
 }
 
