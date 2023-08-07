@@ -18,7 +18,8 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
 
   private enum FunctionType {
   NONE, 
-  FUNCTION
+  FUNCTION,
+  METHOD
   }
   
   @Override
@@ -29,6 +30,17 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
     return null;
   }
 
+  @Override
+  public Void visitClassStmt(Stmt.Class stmt) {
+    declare(stmt.name);
+    define(stmt.name);
+
+    for (Stmt.Function method: stmt.methods) {
+      FunctionType declaration = FunctionType.METHOD;
+      resolveFunction(method, declaration);
+    }
+    return null;
+  }
   @Override 
   public Void visitExpressionStmt(Stmt.Expression stmt) {
     resolve(stmt.expression);
@@ -90,6 +102,13 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
     return null;
   }
 
+
+  @Override
+  public Void visitGetExpr(Expr.Get expr) {
+    resolve(expr.object);
+    return null;
+  }
+
   @Override 
   public Void visitGroupingExpr(Expr.Grouping expr) {
     resolve(expr.expression);
@@ -108,6 +127,12 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
     return null;
   }
 
+  @Override
+  public Void visitSetExpr(Expr.Set expr) {
+    resolve(expr.value);
+    resolve(expr.object);
+    return null;
+  }
   @Override
   public Void visitUnaryExpr(Expr.Unary expr) {
     resolve(expr.right);
@@ -225,18 +250,11 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
     }
   }
 
-
-    /**
-     * @return FunctionType return the currentFunction
-     */
-    public FunctionType getCurrentFunction() {
+  public FunctionType getCurrentFunction() {
         return currentFunction;
     }
 
-    /**
-     * @param currentFunction the currentFunction to set
-     */
-    public void setCurrentFunction(FunctionType currentFunction) {
+  public void setCurrentFunction(FunctionType currentFunction) {
         this.currentFunction = currentFunction;
     }
 

@@ -2,18 +2,19 @@ INTERPRETER/STATEMENT GRAMMAR:
 
 1) program        → declaration* EOF ;
 2) declaration    → varDecl | statement | funDecl ;
-3) statement      → exprStmt | forStmt | ifStmt | printStmt | returnStmt |
+3) classDecl      → "class" IDENTIFIER "{" function* "}" ;
+4) statement      → exprStmt | forStmt | ifStmt | printStmt | returnStmt |
       whileStmt | block ;
-4) returnStmt     → "return" expression? ";";
+5) returnStmt     → "return" expression? ";";
 // The first clause is the initializer
 // The second class is the condition for loop termination
 // The last clause is the increment
-4) forStmt        → "for" "(" (varDecl | exprStmt | ";") expression? ";" expression? ")" statement;
-5) whileStmt      → "while" "(" expression ")" statement ;
-6) ifStmt         → "if" "(" expression ")" statement
+6) forStmt        → "for" "(" (varDecl | exprStmt | ";") expression? ";" expression? ")" statement;
+7) whileStmt      → "while" "(" expression ")" statement ;
+8) ifStmt         → "if" "(" expression ")" statement
                     ("else" statement)? ;
-7) block          → "{" declaration* "}";
-8) varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;
+9) block          → "{" declaration* "}";
+10) varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;
 
 funDecl     → "fun" function
 function    → IDENTIFIER "(" parameters? ")" block ;
@@ -23,20 +24,30 @@ parameters  → IDENTIFIER ("," IDENTIFIER)* ;
 
 PARSING GRAMMAR:
 
-1) comma          → expression (","expression)* ; 
-2) expression     → assignment ;
-3) assignment     → IDENTIFIER "=" assignment | logic_or;
-4) logic_or       → logic_and ( "or" logic_and)*;
-5) logic_and      → equality ( "and" equality)*;
-6) conditional (?:)    → (equality|conditional) ? (primary|conditional) : (primary|conditional) ;   right to left (ignore for main branch)
-7) equality       → comparison ( ( "!=" | "==" ) comparison )* ;
-8) comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
-9) term           → factor ( ( "-" | "+" ) factor )* ;
-10) factor        → unary ( ( "/" | "*" ) unary )* ;
-11) unary         → ( "!" | "-" ) unary | call ;
+1) expression     → assignment ;
+2) assignment     → (call ".")? IDENTIFIER "=" assignment | logic_or;
+3) logic_or       → logic_and ( "or" logic_and)*;
+4) logic_and      → equality ( "and" equality)*;
+5) conditional (?:)    → (equality|conditional) ? (primary|conditional) : (primary|conditional) ;   right to left (ignore for main branch)
+6) equality       → comparison ( ( "!=" | "==" ) comparison )* ;
+7) comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+8) term           → factor ( ( "-" | "+" ) factor )* ;
+9) factor        → unary ( ( "/" | "*" ) unary )* ;
+10) unary         → ( "!" | "-" ) unary | call ;
 // argument needs to have at least one expression in it, a call allows for empty arguments by making argument field optional.
-12) call          → primary ( "(" arguments? ")" )* ;  
-13) primary       → NUMBER | STRING | "true" | "false" | "nil"
+11) call          → primary ( "(" arguments? ")"| "." IDENTIFIER)*  ;  
+12) primary       → NUMBER | STRING | "true" | "false" | "nil"
                | "(" expression ")" | IDENTIFIER;
 
 arguments      → expression ("," expression)* ;               
+
+
+Notes: 
+
+1) In case you don’t remember, the way we handle assignment in the parser is a little funny. 
+   We can’t easily tell that a series of tokens is the left-hand side of an assignment until we reach the =.
+   Now that our assignment grammar rule has call on the left side, which can expand to arbitrarily large expressions, 
+   that final = may be many tokens away from the point where we need to know we’re parsing an assignment.
+   Instead, the trick we do is parse the left-hand side as a normal expression. Then, when we stumble onto the equal sign after it, 
+   we take the expression we already parsed and transform it into the correct syntax tree node for the assignment.
+
