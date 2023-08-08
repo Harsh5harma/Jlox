@@ -1,13 +1,13 @@
 # Java compiler and flags
 JAVAC = javac
-JFLAGS = -d bin -sourcepath craftinginterpreters/myclasses
+JFLAGS = -d bin -sourcepath .
 
 # Source and build directories
-SRCDIR = craftinginterpreters/myclasses
+SRCDIR = .
 BINDIR = bin
 
 # List of source files
-SOURCES := $(wildcard $(SRCDIR)/*.java) $(wildcard $(SRCDIR)/tool/*.java)
+SOURCES := $(wildcard $(SRCDIR)/myclasses/*.java) $(wildcard $(SRCDIR)/myclasses/tool/*.java)
 CLASSES := $(patsubst $(SRCDIR)/%.java, $(BINDIR)/%.class, $(SOURCES))
 
 # Target for compiling the Java classes
@@ -17,6 +17,14 @@ all: $(CLASSES)
 $(BINDIR)/%.class: $(SRCDIR)/%.java
 	@mkdir -p $(BINDIR)
 	$(JAVAC) $(JFLAGS) $<
+
+# Target for running the Lox class with an optional argument
+run:
+	@if [ -n "$(ARGS)" ]; then \
+		java -cp $(BINDIR) myclasses.Lox $(ARGS); \
+	else \
+		java -cp $(BINDIR) myclasses.Lox; \
+	fi
 
 # Target for cleaning the build directory
 clean:
