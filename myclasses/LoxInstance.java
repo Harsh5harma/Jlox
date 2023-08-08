@@ -19,10 +19,12 @@ class LoxInstance {
     /*This is where the distinction between “field” and “property” becomes meaningful. When accessing a property, 
     you might get a field - a bit of state stored on the instance—or you could hit a method defined on the instance’s class. */
     LoxFunction method = klass.findMethod(name.lexeme);
-    if (method!=null) return method;
+    if (method!=null) return method.bind(this);
 
     throw new RuntimeError(name, "Undefined property '" + name.lexeme + "'.");
   }
+
+
 
   void set(Token name, Object value) {
     fields.put(name.lexeme, value);

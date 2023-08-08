@@ -2,7 +2,7 @@ INTERPRETER/STATEMENT GRAMMAR:
 
 1) program        → declaration* EOF ;
 2) declaration    → varDecl | statement | funDecl ;
-3) classDecl      → "class" IDENTIFIER "{" function* "}" ;
+3) classDecl      → "class" IDENTIFIER ("<" IDENTIFIER)? "{" function* "}" ;
 4) statement      → exprStmt | forStmt | ifStmt | printStmt | returnStmt |
       whileStmt | block ;
 5) returnStmt     → "return" expression? ";";
@@ -37,7 +37,7 @@ PARSING GRAMMAR:
 // argument needs to have at least one expression in it, a call allows for empty arguments by making argument field optional.
 11) call          → primary ( "(" arguments? ")"| "." IDENTIFIER)*  ;  
 12) primary       → NUMBER | STRING | "true" | "false" | "nil"
-               | "(" expression ")" | IDENTIFIER;
+               | "(" expression ")" | IDENTIFIER | "super" "." IDENTIFIER ;
 
 arguments      → expression ("," expression)* ;               
 
@@ -51,3 +51,14 @@ Notes:
    Instead, the trick we do is parse the left-hand side as a normal expression. Then, when we stumble onto the equal sign after it, 
    we take the expression we already parsed and transform it into the correct syntax tree node for the assignment.
 
+2) Remember, we always have to keep the resolver’s scope chains and the interpreter’s linked environments in sync with each other. 
+
+3) “Constructing” an object is actually a pair of operations:
+
+The runtime allocates the memory required for a fresh instance. In most languages, this operation is at a fundamental level beneath what user code is able to access.
+
+C++’s “placement new” is a rare example where the bowels of allocation are laid bare for the programmer to prod.
+
+Then, a user-provided chunk of code is called which initializes the unformed object.
+
+4) a super call is a super access followed by a function call. Like other method calls, you can get a handle to a superclass method and invoke it separately.
