@@ -1,16 +1,5 @@
 # Jlox 
-This is my implementation of the Jlox language featured in crafting interpreters by Robert Nystrom  
-
-## Table of Contents:
-
-1. [ Installation ](installation)
-
-2. [ Features and Usage ](features-and-usage)
-
-3. [ Missing Features ](#missing-features)
-
-4. [ Conclusion ](##conclusion)
-
+This is my implementation of the Jlox language featured in crafting interpreters by Robert Nystrom.  
 
 ## Installation:  
 
