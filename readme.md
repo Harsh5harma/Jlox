@@ -3,11 +3,11 @@ This is my implementation of the Jlox language featured in crafting interpreters
 
 ## Table of Contents:
 
-1. [ Installation ](##installation)
+1. [ Installation ](installation)
 
-2. [ Features and Usage ](##features-and-usage)
+2. [ Features and Usage ](features-and-usage)
 
-3. [ Missing Features ](##missing-features)
+3. [ Missing Features ](#missing-features)
 
 4. [ Conclusion ](##conclusion)
 
