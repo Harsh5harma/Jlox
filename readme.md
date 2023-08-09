@@ -1,7 +1,18 @@
 # Jlox 
-This is my implementation of the Jlox language featured in crafting interpreters by Robert Nystrom 
+This is my implementation of the Jlox language featured in crafting interpreters by Robert Nystrom  
 
-## Installation 
+## Table of Contents:
+
+1. [ Installation ](##installation)
+
+2. [ Features and Usage ](##features-and-usage)
+
+3. [ Missing Features ](##missing-features)
+
+4. [ Conclusion ](##conclusion)
+
+
+## Installation:  
 
 <strong>$ gh repo clone Harsh5harma/craftinginterpreters  </strong>
 
@@ -9,6 +20,7 @@ This is my implementation of the Jlox language featured in crafting interpreters
 
 ## Features and Usage
 * Jlox is a dynamically typed scripting language.
+* Jlox is Turing complete.
 * Jlox is built using Java
 * It uses a simple Tree Walk interpreter that employs recursive descent to walk through the Syntax Trees.
 * Jlox implements OOP with the classic single parent inheritance structure.
@@ -38,6 +50,44 @@ This is my implementation of the Jlox language featured in crafting interpreters
    Variables are dynamically typed and they look similar to those in JS. End of Story.
    
    ![image](https://github.com/Harsh5harma/craftinginterpreters/assets/77851315/764a6392-0c89-4a62-8c61-df8a57d49047)
+
+   
+1. #### Flow Control
+
+   Our flow control looks similar to that of C/C++/Java/Javascript.
+
+   #### Example:    
+
+   ![image](https://github.com/Harsh5harma/Jlox/assets/77851315/38f1d6b6-76b8-4330-8d5f-47d4de2ae7bb)
+
+   #### Output:
+
+   ![image](https://github.com/Harsh5harma/Jlox/assets/77851315/376c6ecd-9b2d-442b-870f-07def724e400)
+
+   
+1. #### Loops
+
+   Jlox supports both while and for loops. It does not support do-while loops.
+
+   #### Example of While loop:
+
+   Simple program to countdown from 10 to 1.
+
+   ![image](https://github.com/Harsh5harma/Jlox/assets/77851315/aa8b1488-68fe-4dd7-a188-636616519e57)
+
+   #### Output:
+
+   ![image](https://github.com/Harsh5harma/Jlox/assets/77851315/678de2dd-48ec-40cb-81e4-546385b956dc)
+
+
+   #### Example of For loop:
+
+   ![image](https://github.com/Harsh5harma/Jlox/assets/77851315/86a0de78-e8c5-45ec-a1c2-52eb86ee74c0)
+
+   
+   #### Output:
+
+   ![image](https://github.com/Harsh5harma/Jlox/assets/77851315/dd38633b-2ca1-4011-b65d-63241e8e4a1f)
 
 1. <strong>Function declaration  </strong>
    
@@ -102,5 +152,38 @@ This is my implementation of the Jlox language featured in crafting interpreters
    ![image](https://github.com/Harsh5harma/Jlox/assets/77851315/fcee78bb-8d39-44b3-9534-d0f1e8c60dbb)
 
 
+## Missing Features: 
 
-   
+  If you looked at the examples above, you would've felt that something was missing. I'd like to answer that by saying that <strong>a lot</strong>  
+  is missing. There are many arithmetic operations that Jlox simply can't handle if you compare it to a language like Python, there's no support for many 
+  operators we take for granted. I can't list out <i>all</i> the features its missing but I'll try to mention all those that spring to my mind over time.  
+  I don't consider them failures of the language but more like a challenge list that I need to tackle eventually. 
+
+  * break statements.
+
+  * switch-case expressions.
+
+  * Native functions for file management or OS usage.
+
+  * Complex String manipulation.
+
+  * Explicit Type conversion.
+
+  * Conditional/Ternary operator.
+
+  * User Input functions.
+
+  * ...
+
+## Conclusion:  
+
+  Jlox seems like a language out of the 80s or like a very early draft of python and that's a valid assessment to make but even working through a language
+  that basic taught me a lot. You wanna learn closures? There's no better way than to code the damn thing for your own language. And this is what I observed
+  throughout the project. I had a lot of gaps in my understanding of programming concepts that I was aware of, but there were also many that I was clueless about.
+  Working through Lox filled up a fair bit of them.  
+
+  Now my note to you. Go ahead, build your own Jlox. It's gonna be frustrating at times but you'll come out having learned a lot of stuff you probably consider
+  programming black magic right now. Good luck.
+
+
+
